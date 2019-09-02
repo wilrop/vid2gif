@@ -34,8 +34,9 @@ def make_gif(args):
     file_path = args.file_path
     begin = args.begin
     end = args.end
-    filename = path.basename(file_path)
-    file_type = filename.split(".")[1]  # Split generates an array and the file_type is at index 1.
+    split_filename = path.basename(file_path).split(".")  # Take the filename and split it.
+    filename = split_filename[0]
+    file_type = split_filename[1]
 
     if valid_file_type(file_type):
         gif_name = make_gif_name(filename)
@@ -52,6 +53,7 @@ def make_gif(args):
 
         if begin <= end <= max_frame:
             generate_gif(reader, writer, begin, end)
+            print("Finished converting!")
         elif begin > end:
             print("Your begin time was greater than the end. Please try again.")
         else:
@@ -70,4 +72,3 @@ if __name__ == "__main__":
 
     make_gif(args)
 
-    print("Finished converting!")
