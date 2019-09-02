@@ -64,8 +64,8 @@ if __name__ == "__main__":
     print("Beginning conversion")
     parser = argparse.ArgumentParser()
     parser.add_argument("file_path", help="The path to the file you want to convert")
-    parser.add_argument("begin", help="The beginning timestamp for the new GIF")
-    parser.add_argument("end", help="The ending timestamp for the new GIF")
+    parser.add_argument("begin", help="The beginning timestamp for the new GIF", type=int)
+    parser.add_argument("end", help="The ending timestamp for the new GIF", type=int)
     args = parser.parse_args()
 
     make_gif(args)
