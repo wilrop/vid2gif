@@ -1,14 +1,7 @@
+import argparse
 import imageio  # The python library for reading and writing images. See: http://imageio.github.io/.
 import sys
-
-
-# Create the name of the new gif, by concatenating the current name with the gif filetype.
-def get_filename(file_path):
-    print("Getting file name from path.")
-    split_path = file_path.split('/')              # Split the path.
-    complete_file = split_path[-1]                     # Get the last element. This is the destination.
-    split_file = complete_file.split('.')              # Split the filename. We get the name at 0 and the type at 1.
-    return split_file
+from os import path
 
 
 # Check if the filetype of the provided file is supported.
@@ -34,17 +27,15 @@ def generate_gif(reader, writer, begin, end):
 
     writer.close()      # Close the writer and reader.
     reader.close()
-    print("Finished converting!")
 
 
-# The function that controls the flow of the script. This gets called with the arguments provided by the user.
+# The function that controls the flow of the script.
 def make_gif(args):
-    file_path = args[1]
-    begin = int(args[2])
-    end = int(args[3])
-    split_file = get_filename(file_path)
-    filename = split_file[0]
-    file_type = split_file[1]
+    file_path = args.file_path
+    begin = args.begin
+    end = args.end
+    filename = path.basename(file_path)
+    file_type = filename.split(".")[1]  # Split generates an array and the file_type is at index 1.
 
     if valid_file_type(file_type):
         gif_name = make_gif_name(filename)
@@ -65,4 +56,14 @@ def make_gif(args):
             print("Your end time exceeded the total duration of the video. Please retry for an earlier end.")
 
 
-make_gif(sys.argv)
+if __name__ == "__main__":
+    print("Beginning conversion")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("file_path", help="The path to the file you want to convert")
+    parser.add_argument("begin", help="The beginning timestamp for the new GIF")
+    parser.add_argument("end", help="The ending timestamp for the new GIF")
+    args = parser.parse_args()
+
+    make_gif(args)
+
+    print("Finished converting!")
