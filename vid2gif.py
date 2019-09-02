@@ -41,19 +41,23 @@ def make_gif(args):
         gif_name = make_gif_name(filename)
         reader = imageio.get_reader(file_path)
         writer = imageio.get_writer(gif_name)
+
         meta_data = reader.get_meta_data()
         fps = meta_data['fps']
         duration = meta_data['duration']
+
         max_frame = calc_frame(duration, fps)
         begin = int(calc_frame(begin, fps))
         end = int(calc_frame(end, fps))
 
-        if begin <= end and end <= max_frame:
+        if begin <= end <= max_frame:
             generate_gif(reader, writer, begin, end)
         elif begin > end:
             print("Your begin time was greater than the end. Please try again.")
         else:
             print("Your end time exceeded the total duration of the video. Please retry for an earlier end.")
+    else:
+        print("The file type is not currently supported. Try a different file please!")
 
 
 if __name__ == "__main__":
