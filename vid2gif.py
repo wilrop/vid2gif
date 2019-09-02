@@ -10,8 +10,12 @@ def valid_file_type(file_type):
 
 
 # Create the name of the new gif, by concatenating the current name with the gif filetype.
-def make_gif_name(filename):
-    return filename + '.gif'
+def make_gif_path(filename, save_to):
+    gif_path = filename + ".gif"
+    if save_to:
+        gif_path = path.join(save_to, gif_path)
+
+    return gif_path
 
 
 # Calculate a specific frame for a given time.
@@ -39,9 +43,9 @@ def make_gif(args):
     file_type = split_filename[1]
 
     if valid_file_type(file_type):
-        gif_name = make_gif_name(filename)
+        gif_path = make_gif_path(filename, args.save_to)
         reader = imageio.get_reader(file_path)
-        writer = imageio.get_writer(gif_name)
+        writer = imageio.get_writer(gif_path, format="gif")
 
         meta_data = reader.get_meta_data()
         fps = meta_data['fps']
@@ -68,6 +72,7 @@ if __name__ == "__main__":
     parser.add_argument("file_path", help="The path to the file you want to convert")
     parser.add_argument("begin", help="The beginning timestamp for the new GIF", type=int)
     parser.add_argument("end", help="The ending timestamp for the new GIF", type=int)
+    parser.add_argument("--save_to", help="Path to the location where the GIF will be saved")
     args = parser.parse_args()
 
     make_gif(args)
